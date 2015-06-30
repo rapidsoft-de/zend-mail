@@ -34,6 +34,25 @@ class Headers implements Countable, Iterator
     protected $pluginClassLoader = null;
 
     /**
+     * @var string
+     */
+    protected static $defaultPluginClassLoaderClass = 'Header\HeaderLoader';
+
+    /**
+     * @return string
+     */
+    public static function getDefaultPluginClassLoaderClass() {
+        return self::$defaultPluginClassLoaderClass;
+    }
+
+    /**
+     * @param string $defaultPluginClassLoaderClass
+     */
+    public static function setDefaultPluginClassLoaderClass($defaultPluginClassLoaderClass) {
+        self::$defaultPluginClassLoaderClass = $defaultPluginClassLoaderClass;
+    }
+
+    /**
      * @var array key names for $headers array
      */
     protected $headersKeys = array();
@@ -137,7 +156,7 @@ class Headers implements Countable, Iterator
     public function getPluginClassLoader()
     {
         if ($this->pluginClassLoader === null) {
-            $this->pluginClassLoader = new Header\HeaderLoader();
+            $this->pluginClassLoader = new self::$defaultPluginClassLoaderClass();
         }
         return $this->pluginClassLoader;
     }
