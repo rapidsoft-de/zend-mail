@@ -36,7 +36,7 @@ class Headers implements Countable, Iterator
     /**
      * @var string
      */
-    protected static $defaultPluginClassLoaderClass = 'Header\HeaderLoader';
+    protected static $defaultPluginClassLoaderClass = '\Zend\Mail\Header\HeaderLoader';
 
     /**
      * @return string
