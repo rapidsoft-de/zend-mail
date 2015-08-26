@@ -273,9 +273,11 @@ class Smtp implements TransportInterface
             return $this->getEnvelope()->getFrom();
         }
 
-        $sender = $message->getSender();
-        if ($sender instanceof Address\AddressInterface) {
-            return $sender->getEmail();
+        if ($message->getHeaders()->has('Sender')) {
+            $sender = $message->getSender();
+            if ($sender instanceof Address\AddressInterface) {
+                return $sender->getEmail();
+            }
         }
 
         $from = $message->getFrom();
