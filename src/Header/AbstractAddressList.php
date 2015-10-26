@@ -56,17 +56,25 @@ abstract class AbstractAddressList implements HeaderInterface
         if ($wasEncoded) {
             $header->setEncoding('UTF-8');
         }
-        // split value on ","
+
+        // split value on first "," after @
         $fieldValue = str_replace(Headers::FOLDING, ' ', $fieldValue);
-        $fieldValue = preg_replace('/[^:]+:([^;]*);/', '$1,', $fieldValue);
-        $values     = str_getcsv($fieldValue, ',');
-        array_walk(
-            $values,
-            function (&$value) {
-                $value = trim($value);
+        $result = preg_split('/(?:(@[a-z0-9\-\.\[\]]+>?\s*)),/i', $fieldValue, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $values = [];
+        $value = '';
+
+        // merge after split
+        foreach ($result as $item) {
+
+            if (strpos($item, '@') === false) {
+                $value = $item;
+                continue;
             }
-        );
-        $values = array_filter($values);
+
+            $values[] = trim(str_replace('"', '', $value . $item));
+            $value = '';
+
+        }
 
         $addressList = $header->getAddressList();
         foreach ($values as $address) {
