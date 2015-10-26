@@ -64,7 +64,6 @@ abstract class AbstractAddressList implements HeaderInterface
             $values,
             function (&$value) {
                 $value = trim($value);
-                $value = self::stripComments($value);
             }
         );
         $values = array_filter($values);
@@ -157,20 +156,5 @@ abstract class AbstractAddressList implements HeaderInterface
         $name  = $this->getFieldName();
         $value = $this->getFieldValue(HeaderInterface::FORMAT_ENCODED);
         return (empty($value)) ? '' : sprintf('%s: %s', $name, $value);
-    }
-
-    // Supposed to be private, protected as a workaround for PHP bug 68194
-    protected static function stripComments($value)
-    {
-        return preg_replace(
-            '/\\(
-                (
-                    \\\\.|
-                    [^\\\\)]
-                )+
-            \\)/x',
-            '',
-            $value
-        );
     }
 }
